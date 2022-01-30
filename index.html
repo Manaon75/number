@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>numeron-game</title>
+  <link rel="stylesheet" href="stylesheet.css">
+</head>
+<body>
+
+  <h1>ぬめろん〜数字あてゲーム〜</h1>
+  <div class = "intro">
+    <p>ランダムに決まる３桁の数字を当ててください。</p>
+    <p>ただし、全ての桁に0〜９のいずれかの数字がが入り、各桁の数字は異なります。</p>
+    <p>入力された３桁の数字のうち、正解と桁・値両方が同じ場合EAT、</p>
+    <p>値のみ同じ場合はBITE、を返します。</p>
+    <p>例えば正解が123、入力が135のとき、1EAT1BITE、と返します。</p>
+  </div>
+
+  <div class = "guessInput">
+    <label for="guess">予想の数字を入力してください：</label>
+    <input type="text" class="tryNumber" >
+    <input type="submit"  value="回答" class="trySubmit">
+  </div>
+
+  <div class="pastResult">
+    <p class="title"></p>
+    <p class="lastNumber"></p>
+    <p class="lastEat"></p>
+    <p class="lastBite"></p>
+    <p class="message"></p>
+  </div>
+
+
+  <script>
+
+    let answer = [];
+    while(answer[0]===answer[1] || answer[0]===answer[2] || answer[2]===answer[1]){
+      for(let i=0; i<=2; i++){
+        answer[i]=Math.floor( Math.random()*10);
+      }
+    }
+
+
+    const pastResult = document.querySelector('.pastResult');
+    const tryNumber = document.querySelector('.tryNumber');
+    const trySubmit = document.querySelector('.trySubmit');
+
+    const title =document.querySelector('.title');
+    const lastNumber = document.querySelector('.lastNumber');
+    const lastEat = document.querySelector('.lastEat');
+    const lastBite = document.querySelector('.lastBite');
+    const message = document.querySelector('.message');
+
+    tryNumber.focus();
+
+    let count = 1;
+
+    function judge(){
+      let callNumber = String(tryNumber.value);
+      const callStr = callNumber.split('');
+      const call = [Number(callStr[0]),Number(callStr[1]),Number(callStr[2])]
+
+      let eat = 0;
+      let bite = 0;
+      for(let i = 0; i <= 2; i++){
+        if(answer[i] === call[i]){
+          eat++;
+        }
+      }
+      for(let i = 0; i <= 2; i++){
+        for(let j = 1; j <= 2; j++){
+          let k = (i+j)%3
+          if(answer[i]===call[k]){
+            bite++;
+          }
+        }
+      }
+
+      title.innerHTML += "try"+count + '<br>';
+      lastNumber.innerHTML += callNumber + '<br>';
+      lastEat.innerHTML += eat+"EAT"+'<br>';
+      lastBite.innerHTML += bite+"BITE" + '<br>';
+
+      if(eat === 3){
+        message.innerHTML = "おめでとうございます！正解です！<br>あなたが正解に辿り着くまで"+count+"回かかりました。"
+        message.style.backgroundColor = 'lightgreen';
+
+      }
+
+      count++;
+
+
+    }
+
+
+    trySubmit.addEventListener('click', judge);
+
+
+
+
+
+
+
+
+
+
+  </script>
+
+
+</body>
+</html>
